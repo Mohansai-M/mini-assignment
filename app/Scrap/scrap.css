@@ -1,0 +1,65 @@
+.scrap-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.scrap-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.scrap-input-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.scrap-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.scrap-button {
+    background-color: #0070f3;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.scrap-button:hover {
+    background-color: #0059c9;
+}
+
+.scrap-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.scrap-error {
+    color: red;
+    text-align: center;
+    font-weight: 500;
+}
+
+.scrap-result {
+    margin-top: 20px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.scrap-result ul {
+    list-style: none;
+    padding-left: 20px;
+}

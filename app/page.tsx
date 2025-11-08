@@ -1,16 +1,19 @@
 "use client";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import "./globals.css";
 
 export default function Home() {
-  const router = useRouter();
-
   return (
-    <div>
-      <h1>Search and Scrap</h1>
+    <div className="home-container">
+      <h1 className="home-title">Search and Scrap</h1>
 
-      <div className="">
-        <button onClick={() => router.push("/Search")}>Go to Search</button>
-        <button onClick={() => router.push("/Scrap")}>Go to Scrap</button>
+      <div className="link-group">
+        <Link href="/Search" className="nav-link search-link">
+          Go to Search
+        </Link>
+        <Link href="/Scrap" className="nav-link scrap-link">
+          Go to Scrap
+        </Link>
       </div>
     </div>
   );

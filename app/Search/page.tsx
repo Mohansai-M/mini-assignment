@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./search.css";
 
 interface Item {
@@ -9,9 +9,19 @@ interface Item {
   body: string;
 }
 
+interface SearchResponse {
+  status: string;
+  results: Item[];
+  count: number;
+  summary?: string;
+  sources?: string[];
+  message?: string;
+  error?: string;
+}
+
 export default function Search() {
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
+  const [apiRes, setApiRes] = useState<SearchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -22,35 +32,38 @@ export default function Search() {
   const handleSearch = async () => {
     if (!search.trim()) {
       setError("Please enter a search query");
-      setResults([]);
+      setApiRes(null);
       return;
     }
 
+    if (search.trim().length < 2) {
+      setError("Please enter at least 2 characters to search");
+      setApiRes(null);
+      return;
+    }
     setLoading(true);
     setError("");
-    setResults([]);
+    setApiRes(null);
 
     try {
       const response = await fetch("/api/search", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: search }),
       });
 
-      const data = await response.json();
+      const data: SearchResponse = await response.json();
 
       if (!response.ok) {
         setError(data.error || "Something went wrong");
-        setResults([]);
-      } else if (data.response?.length === 0) {
-        setError(data.message || "No results found pleasse try again");
+        setApiRes(null);
+      } else if (data.results?.length === 0) {
+        setError(data.message || "No results found please try again");
       } else {
-        setResults(data.results);
+        setApiRes(data);
       }
     } catch (err) {
-      setError("error. Please try again.");
+      setError("Error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -68,7 +81,7 @@ export default function Search() {
           placeholder="Enter search query"
           className="search-input"
         />
-        <button onClick={handleSearch} className="search-button">
+        <button onClick={() => handleSearch()} className="search-button">
           Search
         </button>
       </div>
@@ -77,12 +90,21 @@ export default function Search() {
       {error && <p className="error-text">{error}</p>}
 
       <div className="search-results-section">
-        {results.map((item: Item) => (
-          <div key={item.id} className="result-card">
-            <h3 className="result-title">{item.title}</h3>
-            <p className="result-body">{item.body}</p>
+        {apiRes?.results?.map((item) => (
+          <div key={item?.id} className="result-card">
+            <h3 className="result-title">{item?.title}</h3>
+            <p className="result-body">
+              {item?.body.split(".")[0].slice(0, 60)}...
+            </p>
           </div>
         ))}
+
+        {apiRes?.summary && (
+          <div className="summary-section">
+            <h2 className="summary-title">Summary</h2>
+            <p className="summary-text">{apiRes?.summary}</p>
+          </div>
+        )}
       </div>
     </div>
   );

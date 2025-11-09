@@ -11,6 +11,8 @@ Develop a compact search user interface that interacts with a backend route to r
 - A single web page containing:
   - Search input field
   - Loading and empty states
+  - Snippet in search results shows first 50–60 characters of the first sentence.
+  - Summary combines up to 3 full sentences from top matches.
 
 ### Backend
 - POST `/api/search`

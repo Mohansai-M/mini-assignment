@@ -7,7 +7,12 @@ export async function POST(req) {
     const body = await req.json();
     if (!body.query || !body.query.trim()) {
       return NextResponse.json(
-        { error: "Query cannot be empty" },
+        {
+          status: "error",
+          error: "Query cannot be empty",
+          results: [],
+          count: 0,
+        },
         { status: 400 }
       );
     }
@@ -19,7 +24,12 @@ export async function POST(req) {
       .slice(0, 3);
     if (topMatches.length === 0) {
       return NextResponse.json(
-        { message: "No matches found Please Try again", response: [] },
+        {
+          status: "success",
+          results: [],
+          count: 0,
+          message: "No matches found. Please try again.",
+        },
         { status: 200 }
       );
     }
@@ -39,6 +49,14 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json(
+      {
+        status: "error",
+        error: "Invalid request or server error",
+        results: [],
+        count: 0,
+      },
+      { status: 400 }
+    );
   }
 }

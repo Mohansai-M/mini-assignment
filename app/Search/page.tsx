@@ -29,45 +29,48 @@ export default function Search() {
     setSearch(value);
   };
 
-  const handleSearch = async () => {
-    if (!search.trim()) {
-      setError("Please enter a search query");
-      setApiRes(null);
-      return;
-    }
+ const handleSearch = async () => {
+   if (!search.trim()) {
+     setError("Please enter a search query");
+     setApiRes(null);
+     return;
+   }
 
-    if (search.trim().length < 2) {
-      setError("Please enter at least 2 characters to search");
-      setApiRes(null);
-      return;
-    }
-    setLoading(true);
-    setError("");
-    setApiRes(null);
+   if (search.trim().length < 2) {
+     setError("Please enter at least 2 characters to search");
+     setApiRes(null);
+     return;
+   }
+   setLoading(true);
+   setError("");
+   setApiRes(null);
 
-    try {
-      const response = await fetch("/api/search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: search }),
-      });
+   try {
+     const response = await fetch("/api/search", {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ query: search }),
+     });
 
-      const data: SearchResponse = await response.json();
+     const data: SearchResponse = await response.json();
 
-      if (!response.ok) {
-        setError(data.error || "Something went wrong");
-        setApiRes(null);
-      } else if (data.results?.length === 0) {
-        setError(data.message || "No results found please try again");
-      } else {
-        setApiRes(data);
-      }
-    } catch (err) {
-      setError("Error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+     if (data.status === "error") {
+       setError(data.error || "Something went wrong");
+       setApiRes(null);
+     } else if (data.results?.length === 0) {
+       setError(data.message || "No results found please try again");
+       setApiRes(null);
+     } else {
+       setApiRes(data);
+       setError("");
+     }
+   } catch (err) {
+     setError("Network or server error. Please try again.");
+     setApiRes(null);
+   } finally {
+     setLoading(false);
+   }
+ };
 
   return (
     <div className="search-container">

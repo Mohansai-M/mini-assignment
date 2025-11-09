@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task A – Mini Full-Stack Search
 
-## Getting Started
+## Objective
+Develop a compact search user interface that interacts with a backend route to retrieve and display the top matches from a local JSON dataset. The application also includes a micro scraper endpoint for reference, but it is **not required for Task A functionality**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Task A – Search Functionality
+
+### Frontend
+- A single web page containing:
+  - Search input field
+  - Loading and empty states
+
+### Backend
+- POST `/api/search`
+  - Accepts JSON body: `{ "query": string }`
+  - Returns top 3 matches from `data/faqs.json` based on keyword relevance.
+  - Returns a combined 2-3 sentence summary of top matches.
+  - Includes a `sources` field with IDs of top results.
+
+**The search endpoint queries a local JSON dataset containing objects with the following fields:**
+- `id`: Unique identifier for each FAQ
+- `title`: Title of the FAQ
+- `body`: Content of the FAQ
+
+Example Request :
+```http
+POST /api/search
+Content-Type: application/json
+{
+  "query": "trust badges"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Example Response (200)
+```json
+{
+  "status": "success",
+  "results": [
+    {
+      "id": "1",
+      "title": "Trust badges near CTA",
+      "body": "Adding trust badges near the primary CTA increased signups by 12%.",
+      "score": 2
+    }
+  ],
+  "count": 1,
+  "summary": "Adding trust badges near the primary CTA increased signups by 12%.",
+  "sources": ["1"]
+}
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Acceptance Criteria
+- Query accuracy: "trust badges" returns item id 1 as the top result
+- Result limit & ordering: Max 3 items ordered by relevance
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Error handling:
+- Empty query → 400 status code
+- No matches → empty array with friendly message
 
-## Learn More
+## Task B – Micro Scraper (Reference Only)
+**Endpoint**
+GET `/api/scrape?url=...`
 
-To learn more about Next.js, take a look at the following resources:
+Returns:
+```json
+{
+  "title": "Example Domain",
+  "metaDescription": "This domain is for use in illustrative examples in documents.",
+  "h1": "Example Domain",
+  "status": 200
+}
+```
+- Timeout: 20 seconds
+- Handles invalid/missing URLs → 400
+- Handles timeouts → 504
+- Bonus: User-Agent override implemented
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Note:** This endpoint is included in this repo for demonstration but is submitted separately in the [Task-B repository](https://github.com/Mohansai-M/Dev_Mohansai_TaskB).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Setup Instructions**
+1. Clone Repository
+   
+```
+git clone https://github.com/Mohansai-M/Dev_Mohansai_TaskA.git
+cd Dev_Mohansai_TaskA
+```
+2. Install Dependencies
 
-## Deploy on Vercel
+```
+npm install
+```
+3. Run Development Server
+```
+npm run dev
+```
+4. Test Search API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Use the search UI at `http://localhost:3000/search` Or call `/api/search directly` with Postman
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+(Optional) Test Scraper API
+
+### Tech Stack
+- Next.js (React + API Routes)
+- JavaScript
+- Puppeteer – only for Task B
+
+### Testing Checklist
+- Search query returns correct top results
+- Maximum of 3 results
+- Loading, empty, and error states are handled

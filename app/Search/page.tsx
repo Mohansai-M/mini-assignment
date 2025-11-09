@@ -94,7 +94,9 @@ export default function Search() {
           <div key={item?.id} className="result-card">
             <h3 className="result-title">{item?.title}</h3>
             <p className="result-body">
-              {item?.body.split(".")[0].slice(0, 60)}...
+              {item.body.length > 60
+                ? item.body.slice(0, 60) + "..."
+                : item.body}
             </p>
           </div>
         ))}

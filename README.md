@@ -1,5 +1,7 @@
 # Task A – Mini Full-Stack Search
 
+This is a simple and fully functional search application that queries a local JSON dataset. It returns the top three results, includes a short summary of matched content and handles empty queries, no results, and other errors.
+
 ## Objective
 Develop a compact search user interface that interacts with a backend route to retrieve and display the top matches from a local JSON dataset. The application also includes a micro scraper endpoint for reference, but it is **not required for Task A functionality**.
 

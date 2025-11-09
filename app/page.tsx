@@ -11,9 +11,6 @@ export default function Home() {
         <Link href="/Search" className="nav-link search-link">
           Go to Search
         </Link>
-        <Link href="/Scrap" className="nav-link scrap-link">
-          Go to Scrap
-        </Link>
       </div>
     </div>
   );

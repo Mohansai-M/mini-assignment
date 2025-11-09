@@ -4,7 +4,8 @@
 Develop a compact search user interface that interacts with a backend route to retrieve and display the top matches from a local JSON dataset. The application also includes a micro scraper endpoint for reference, but it is **not required for Task A functionality**.
 
 ---
-
+[Live](https://mini-search-app.vercel.app)<br>
+[Demo](https://www.loom.com/share/ae160c28ee2a41de898f5028d93f53be)
 ## Task A – Search Functionality
 
 ### Frontend

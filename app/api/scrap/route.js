@@ -19,14 +19,34 @@ export async function GET(request) {
   try {
     browser = await puppeteer.launch({
       headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
     const page = await browser.newPage();
 
-    await page.goto(targetUrl, {
+    const customAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+        "(KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36";
+
+    await page.setUserAgent(customAgent);
+    
+    const maxAttempts = 2;
+    const navigationOptions = {
       waitUntil: ["domcontentloaded", "networkidle2"],
       timeout: timeout_sec,
-    });
+    };
+
+    for (let i = 0; i < maxAttempts; i++) {
+      try {
+        await page.goto(targetUrl, navigationOptions);
+        break;
+      } catch (err) {
+        if (i === maxAttempts - 1) {
+          throw new Error(
+            `Failed to navigate to ${targetUrl} after ${maxAttempts} attempts.`
+          );
+        }
+      }
+    }
 
     if (isTimedOut) {
       return Response.json({ error: "Timeout" }, { status: 504 });
